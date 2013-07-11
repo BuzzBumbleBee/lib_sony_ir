@@ -24,7 +24,7 @@ JNIEXPORT jint JNICALL Java_com_buzz_bee_openir_IRMainActivity_startIR
    /*
    char *data = (char*) IRlearnKeyData();
 
-   LOGE("%s : test! %s\n",__func__,data);
+   LOGI("%s : test! %s\n",__func__,data);
 
    free(data);*/
 
@@ -53,7 +53,7 @@ JNIEXPORT jint JNICALL Java_com_buzz_bee_openir_IRMainActivity_learnKey
 
   int ret = IRlearnKeyToFile(filename);
 
-  LOGE("%s : filename %s\n",__func__,filename);
+  LOGI("%s : filename %s\n",__func__,filename);
 
   (*je)->ReleaseStringUTFChars(je, js, filename);
 
@@ -68,7 +68,7 @@ JNIEXPORT jint JNICALL Java_com_buzz_bee_openir_IRMainActivity_sendKey
 
   int ret = IRsendKeyFromFile(filename);
 
-  LOGE("%s : filename %s\n",__func__,filename);
+  LOGI("%s : filename %s\n",__func__,filename);
 
   (*je)->ReleaseStringUTFChars(je, js, filename);
 

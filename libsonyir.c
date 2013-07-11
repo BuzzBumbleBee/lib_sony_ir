@@ -61,7 +61,7 @@ static int sleeptime = 10000;
 
 int IRsendcmd(void *cmd, int len){
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     struct pollfd polldata;
     polldata.fd = fd;
@@ -85,7 +85,7 @@ int IRsendcmd(void *cmd, int len){
 //Powers on the IR chip by writing to the correct device node
 int IRpowerOn(int state){
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     errno = 0;
     int powerctl = open(IRPOWERNODE, O_WRONLY);
@@ -110,7 +110,7 @@ int IRpowerOn(int state){
 //Open the serial device and set the correct serial settings
 int IRserialOpen(){
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     errno = 0;
 
@@ -159,7 +159,7 @@ int IRserialOpen(){
 //close the serial device
 int IRserialClose(){
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     //close serial device
     int ret = close(fd);
@@ -173,7 +173,7 @@ int IRlearnKeyData(char **data){
     tcflush(fd,TCIOFLUSH);
     usleep(sleeptime);
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     cmdGetKeyData learnkey;
 
@@ -191,7 +191,7 @@ int IRlearnKeyData(char **data){
     
     int status = IRsendcmd(&magic, 4); //send the "magic" data
     status = IRsendcmd(&learnkey, sizeof(learnkey)); //send the "key raw key command"
-    LOGE("%s : Write status %d\n",__func__,status);
+    LOGI("%s : Write status %d\n",__func__,status);
 
     //usleep(50000);
 
@@ -204,7 +204,7 @@ int IRlearnKeyData(char **data){
     char *localdata = *data;
     memset(localdata,'\0', response_len * sizeof(char));
 
-    LOGE("%s : response len %d\n",__func__,response_len);
+    LOGI("%s : response len %d\n",__func__,response_len);
 
     int count = 0;
     //read off the length of the response
@@ -221,7 +221,7 @@ int IRlearnKeyData(char **data){
 
 int IRlearnKeyToFile(char *filename){
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
 
     char *keydata;
@@ -231,12 +231,12 @@ int IRlearnKeyToFile(char *filename){
 
     int i =0;
     for(i=0; i<length; i++){
-        LOGE("%s : response data 0x%X\n",__func__,keydata[i]);
+        LOGI("%s : response data 0x%X\n",__func__,keydata[i]);
     }
 
     int outfile = open(filename, O_RDWR | O_CREAT);
 
-    LOGE("%s : test! %d\n",__func__, length);
+    LOGI("%s : test! %d\n",__func__, length);
     int status = write(outfile, &length, 1);
     status = write(outfile, keydata, length);
 
@@ -266,7 +266,7 @@ int IRsendKeyFromFile(char *filename){
     read(infile, &keydata , keylen);
     close(infile);
 
-    LOGE("%s : Sending Key Of Length %d\n", __func__, keylen);
+    LOGI("%s : Sending Key Of Length %d\n", __func__, keylen);
     int status = IRsendRawKey(keydata, keylen);
     return status;
 
@@ -278,7 +278,7 @@ int IRsendRawKey(char *data, int length){
     tcflush(fd,TCIOFLUSH);
     usleep(sleeptime);
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     cmdSendKeyData keySend;
 
@@ -309,7 +309,7 @@ int IRsendRawKey(char *data, int length){
     char zero = '\0';
     write(fd,&zero,1u);
 
-    LOGE("%s : sent : %d",__func__,status);
+    LOGI("%s : sent : %d",__func__,status);
 
     return status;
 }
@@ -320,7 +320,7 @@ int IRkickStart(){
     tcflush(fd,TCIOFLUSH);
     usleep(sleeptime);
 
-    LOGE("%s : CALLED\n", __func__);
+    LOGI("%s : CALLED\n", __func__);
 
     cmdVersion vers;
     memset(&vers,'\0',sizeof(vers));
@@ -342,7 +342,7 @@ int IRkickStart(){
     char response[response_len];
     //read off the length of the response
     status = read(fd, &response, response_len);
-    LOGE("%s : Read response of size %d\n",__func__,status);
+    LOGI("%s : Read response of size %d\n",__func__,status);
 
     return 1;
     
