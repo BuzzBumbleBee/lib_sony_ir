@@ -89,8 +89,8 @@ int IRpowerOn(int state){
 
     errno = 0;
     int powerctl = open(IRPOWERNODE, O_WRONLY);
-    
-    if (powerctl <0){
+
+    if (powerctl < 0){
         LOGE("%s : Error opaning power node %s error : %s\n", __func__, IRPOWERNODE , strerror(errno));
     }
 
@@ -134,7 +134,7 @@ int IRserialOpen(){
     cfsetispeed(&toptions, B19200);
     cfsetispeed(&toptions, B19200);
 
-    int i = 0;
+    unsigned int i = 0;
     for (i = 0; i < sizeof(toptions.c_cc); i++){
         toptions.c_cc[i] = 0u;
     }
@@ -143,7 +143,9 @@ int IRserialOpen(){
     toptions.c_cc[VTIME] = 50;
 
     //set the options 
-    if( tcsetattr(fd, TCSANOW, &toptions) < 0) {
+
+    int state = tcsetattr(fd, TCSANOW, &toptions);
+    if( state < 0) {
         LOGE("%s E: Error setting serial attributes\n", __func__);
     }
 
@@ -219,7 +221,7 @@ int IRlearnKeyData(char **data){
 }
 
 
-int IRlearnKeyToFile(char *filename){
+int IRlearnKeyToFile(const char *filename){
 
     LOGI("%s : CALLED\n", __func__);
 
@@ -234,7 +236,7 @@ int IRlearnKeyToFile(char *filename){
         LOGI("%s : response data 0x%X\n",__func__,keydata[i]);
     }
 
-    int outfile = open(filename, O_RDWR | O_CREAT);
+    int outfile = open(filename, O_RDWR | O_CREAT, 0666);
 
     LOGI("%s : test! %d\n",__func__, length);
     int status = write(outfile, &length, 1);
@@ -246,7 +248,7 @@ int IRlearnKeyToFile(char *filename){
 
 }
 
-int IRsendKeyFromFile(char *filename){
+int IRsendKeyFromFile(const char *filename){
 
     
     int infile = open(filename, O_RDONLY);

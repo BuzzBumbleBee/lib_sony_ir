@@ -1,7 +1,8 @@
 #include "irjni.h"
+#include "libsonyir.h"
 #include <unistd.h>
 
-#include <android/log.h>  
+#include <android/log.h>
 
 #define LOG_TAG "libsonyir_jni"
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, fmt, ##args)
